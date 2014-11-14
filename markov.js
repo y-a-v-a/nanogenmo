@@ -1,18 +1,32 @@
 var fs = require('fs');
 var arg = process.argv[2];
 
-var stream = fs.createReadStream(arg);
+var util = require('util');
+var Transform = require('stream').Transform;
 
-var bs = [];
-var table = {};
-stream.on('data', function(chunk) {
-    bs.push(chunk);
-});
+util.inherits(CleanUp, Transform);
+util.inherits(ProcessToTable, Transform);
 
-stream.on('end', function() {
-    var res = Buffer.concat(bs).toString();
-    var array = res.split(/\r\n|\n|\r| /);
+var cleanUp = new CleanUp({ decodeStrings: false, objectMode: true });
+var processToTable = new ProcessToTable({ objectMode: true });
 
+var readable = fs.createReadStream(arg);
+readable.setEncoding('utf8');
+
+readable.pipe(cleanUp)
+.pipe(processToTable);
+.pipe(process.stdout);
+
+function CleanUp(options) {
+    if (!(this instanceof CleanUp)) {
+        return new CleanUp(options);
+    }
+
+    Transform.call(this, options);
+}
+
+CleanUp.prototype._transform = function(data, encoding, done) {
+    var array = data.split(/\r\n|\n|\r| /);
     array = array.filter(function(el) {
         // remove empty strings
         return el.length > 0;
@@ -23,36 +37,65 @@ stream.on('end', function() {
         // remove all latin numbers
         return el.replace(/[0-9:]/g,'').length > 0;
     });
+    array.reverse().forEach(this.push.bind(this));
+    done();
+};
 
-    var key, value;
-    for (var i = 0 ; i < array.length; i++) {
-        key = '' + array[i];
-        value = array[i + 1] || array[0];
-        if (typeof table[key] === 'undefined') {
-            table[key] = [value];
-        } else {
-            if (typeof table[key].push !== 'undefined' && table[key].indexOf(value) === -1) {
-               table[key].push(value);
-           }
-        }
+function ProcessToTable(options) {
+    Transform.call(this, options);
+    
+    this._former;
+    this._table = {};
+}
+
+ProcessToTable.prototype._transform = function(key, encoding, done) {
+    if (typeof this._former === 'undefined') {
+        this._former = key;
     }
     
+    var value = this._former;
+    if (typeof this._table[key] === 'undefined') {
+        this._table[key] = [value];
+    } else {
+        if (typeof this._table[key].push !== 'undefined'
+            && this._table[key].indexOf(value) === -1) {
+           this._table[key].push(value);
+       }
+    }
+
+    this._former = key;
+    done();
+};
+
+ProcessToTable.prototype._flush = function(done) {
+    this._table[Object.keys(this._table)[0]] = [this._former];
+    done();
+}
+
+processToTable.on('end', function() {
+    createText(this._table);
+});
+
+function createText(table) {
     var start = 0;
-    var end = 5000;
-    var s = '';
-    var current = array[0];
-    s += current;
+    var end = 500;
+    var s = [];
+    var current = Object.keys(table)[0];
+    s.push(current);
     for (start; start < end; start++) {
         if (table[current]) {
             current = table[current][Math.floor(Math.random() * table[current].length)];
-            s += ' ';
-            s += current;
+            if (start === end - 1) {
+                current += '.';
+            }
+            s.push(current);
         }
+
     }
-    s += '.';
-    var s = s.replace(/^([a-z]{1})|([\.\?\!]{1} [a-z]{1})/g, function(match) { return match.toUpperCase(); });
+    var s = s.join(' ').replace(/^([a-z]{1})|([\.\?\!]{1} [a-z]{1})/g, function(match) {
+        return match.toUpperCase();
+    });
+    
     console.log(s);
-});
-
-
+}
 
