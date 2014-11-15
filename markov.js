@@ -1,5 +1,19 @@
+/**
+* Random text generator
+* Based on using an input text.
+* Checks for all words what the next words are.
+* When generating a new text, is chooses randomly
+* which word to add next from all nexts
+* @license MIT
+* 2014 y-a-v-a • Vincent Bruijn <vebruijn@gmail.com>
+*/
 var fs = require('fs');
 var arg = process.argv[2];
+
+if (!fs.existsSync(arg)) {
+    console.log('Input file does not exist.');
+    process.exit(1);
+}
 
 var util = require('util');
 var Transform = require('stream').Transform;
@@ -14,7 +28,7 @@ var readable = fs.createReadStream(arg);
 readable.setEncoding('utf8');
 
 readable.pipe(cleanUp)
-.pipe(processToTable);
+.pipe(processToTable)
 .pipe(process.stdout);
 
 function CleanUp(options) {
@@ -32,9 +46,11 @@ CleanUp.prototype._transform = function(data, encoding, done) {
         return el.length > 0;
     }).filter(function(el) {
         // remove Roman numbers
+        // used for Shakespeare sonnets
         return el.replace(/[LMCXIV]/g, '').length > 0;
     }).filter(function(el) {
         // remove all latin numbers
+        // used for bible
         return el.replace(/[0-9:]/g,'').length > 0;
     });
     array.reverse().forEach(this.push.bind(this));
@@ -78,24 +94,26 @@ processToTable.on('end', function() {
 
 function createText(table) {
     var start = 0;
-    var end = 500;
-    var s = [];
+    var end = 50000;
+    var words = [];
     var current = Object.keys(table)[0];
-    s.push(current);
+    words.push(current);
     for (start; start < end; start++) {
         if (table[current]) {
             current = table[current][Math.floor(Math.random() * table[current].length)];
             if (start === end - 1) {
                 current += '.';
             }
-            s.push(current);
+            words.push(current);
+        } else {
+            current = Object.keys(table)[0];
         }
-
     }
-    var s = s.join(' ').replace(/^([a-z]{1})|([\.\?\!]{1} [a-z]{1})/g, function(match) {
+    var text = words.join(' ').replace(/^([a-z]{1})|([\.\?\!]{1} [a-z]{1})/g, function(match) {
         return match.toUpperCase();
     });
     
-    console.log(s);
+    console.log(text);
+    process.exit(0);
 }
 
