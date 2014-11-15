@@ -86,7 +86,7 @@ ProcessToTable.prototype._transform = function(key, encoding, done) {
 ProcessToTable.prototype._flush = function(done) {
     this._table[Object.keys(this._table)[0]] = [this._former];
     done();
-}
+};
 
 processToTable.on('end', function() {
     createText(this._table);
@@ -112,8 +112,12 @@ function createText(table) {
     var text = words.join(' ').replace(/^([a-z]{1})|([\.\?\!]{1} [a-z]{1})/g, function(match) {
         return match.toUpperCase();
     });
-    
-    console.log(text);
-    process.exit(0);
+
+    var fileName = 'text-' + Date.now() + '.txt';
+    fs.writeFile(fileName, text, function(err) {
+        if(err) throw err;
+        console.log('Saved to file: ' + fileName);
+        process.exit(0);
+    });
 }
 
