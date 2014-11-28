@@ -1,5 +1,7 @@
 #nanogenmo
 
+nanogenmo issue: https://github.com/dariusk/NaNoGenMo-2014/issues/104
+
 ## Inspiration
 
 I got to know about NaNoGenMo 2014 via Twitter. I first reworked an old script but then I got fed up with it (partly because it was written in PHP) and wanted to create something new (using JavaScript). I like generators which use existing text to create something new.
