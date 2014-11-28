@@ -114,10 +114,39 @@ function createText(table) {
     });
 
     var fileName = 'text-' + Date.now() + '.txt';
-    fs.writeFile(fileName, text, function(err) {
+    fs.writeFile(fileName, wordwrap(text, 120), function(err) {
         if(err) throw err;
         console.log('Saved to file: ' + fileName);
         process.exit(0);
     });
+}
+
+function wordwrap(string, width, lineBreak, cut) {
+    var words = string.split(' ').reverse();
+
+    var lineWidth = width || 75;
+    var lBreak = lineBreak || '\n';
+    var doCut = cut || false;
+
+    var word;
+    var result = '';
+    var line = '';
+
+    while (words.length) {
+        word = words.pop();
+        if ((line + word).length >= lineWidth) {
+            if (word.length > lineWidth && cut === true) {
+                words.push(word.substring(lineWidth));
+                word = word.substring(0, lineWidth);
+            }
+            result += line.trim() + lBreak;
+            line = '';
+        }
+        line += word + ' ';
+        if (!words.length) {
+            result += line.trim();
+        }
+    }
+    return result;
 }
 
