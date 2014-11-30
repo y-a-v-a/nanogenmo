@@ -135,7 +135,7 @@ function wordwrap(string, width, lineBreak, cut) {
     while (words.length) {
         word = words.pop();
         if ((line + word).length >= lineWidth) {
-            if (word.length > lineWidth && cut === true) {
+            if (word.length > lineWidth && doCut === true) {
                 words.push(word.substring(lineWidth));
                 word = word.substring(0, lineWidth);
             }
