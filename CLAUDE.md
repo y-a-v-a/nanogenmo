@@ -18,7 +18,7 @@ node src/generator.mjs [input_file] [output_file] [seed_word] [word_count]
 Arguments:
 - `input_file`: Source text file to build the Markov chain (required unless loading a table)
 - `output_file`: Destination file for generated text (default: timestamped file)
-- `seed_word`: Starting word for generation (default: random word from text)
+- `seed_word`: Starting word for generation (default: random word from text). Case-insensitive as the Markov chain uses lowercase words.
 - `word_count`: Number of words to generate (default: 100)
 - `table_file`: Path to store/load the Markov chain table as JSON (optional)
 

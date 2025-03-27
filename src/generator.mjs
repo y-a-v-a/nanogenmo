@@ -40,7 +40,8 @@ class CleanUp extends Transform {
         const array = data.split(/\r\n|\n|\r| /)
             .filter(el => el.length > 0)
             .filter(el => el.replace(/[LMCXIV]/g, '').length > 0) // remove Roman numbers
-            .filter(el => el.replace(/[0-9:]/g, '').length > 0);  // remove all latin numbers
+            .filter(el => el.replace(/[0-9:]/g, '').length > 0)   // remove all latin numbers
+            .map(word => word.toLowerCase());                      // convert to lowercase
 
         array.reverse().forEach(word => this.push(word));
         done();
@@ -51,6 +52,7 @@ class ProcessToTable extends Transform {
     constructor(options = {}) {
         super({ ...options, objectMode: true });
         this._former = undefined;
+        // The table maps lowercase words to arrays of possible following words (also lowercase)
         this._table = {};
     }
 
@@ -126,8 +128,11 @@ async function createText(table) {
     let start = 0;
     const words = [];
     
+    // Convert seed word to lowercase if provided
+    const lowerSeedWord = seedWord ? seedWord.toLowerCase() : null;
+    
     // Use seed word if provided and it exists in the table, otherwise use the first key
-    let current = seedWord && table[seedWord] ? seedWord : Object.keys(table)[0];
+    let current = lowerSeedWord && table[lowerSeedWord] ? lowerSeedWord : Object.keys(table)[0];
     
     words.push(current);
     
