@@ -1,0 +1,34 @@
+{
+  "name": "nanogenmo",
+  "version": "1.1.0",
+  "description": "Text generator using Markov chains for National Novel Generation Month",
+  "homepage": "https://github.com/y-a-v-a/nanogenmo#readme",
+  "bugs": {
+    "url": "https://github.com/y-a-v-a/nanogenmo/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/y-a-v-a/nanogenmo.git"
+  },
+  "license": "MIT",
+  "author": "y-a-v-a • Vincent Bruijn <vebruijn@gmail.com>",
+  "type": "module",
+  "main": "generator.mjs",
+  "engines": {
+    "node": ">=16.0.0"
+  },
+  "scripts": {
+    "start": "node generator.mjs",
+    "generate": "node generator.mjs",
+    "run-pg1041": "node generator.mjs pg1041.txt pg1041-output.txt \"\" 500",
+    "test": "node --experimental-vm-modules node_modules/jest/bin/jest.js"
+  },
+  "devDependencies": {
+    "jest": "^29.7.0"
+  },
+  "keywords": [
+    "markov",
+    "text-generation",
+    "nanogenmo"
+  ]
+}
