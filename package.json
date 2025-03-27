@@ -21,6 +21,8 @@
     "start": "node generator.mjs",
     "generate": "node generator.mjs",
     "run-pg1041": "node generator.mjs pg1041.txt pg1041-output.txt \"\" 500",
+    "save-table": "node generator.mjs pg1041.txt pg1041-output.txt \"\" 500 markov-table.json",
+    "load-table": "node generator.mjs \"\" pg1041-from-table.txt \"\" 500 markov-table.json",
     "test": "node --experimental-vm-modules node_modules/jest/bin/jest.js"
   },
   "devDependencies": {
