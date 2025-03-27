@@ -37,7 +37,7 @@ describe('wordwrap function', () => {
     const text = 'This is a test of custom line breaks';
     const wrapped = wordwrap(text, 10, '<br>');
     
-    expect(wrapped).toBe('This is a<br>test of<br>custom line<br>breaks');
+    expect(wrapped).toBe('This is a<br>test of<br>custom<br>line<br>breaks');
   });
 
   test('handles empty string', () => {

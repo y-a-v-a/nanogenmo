@@ -7,12 +7,15 @@
  * @returns {string} The word wrapped string
  */
 export function wordwrap(string, width = 75, lineBreak = '\n', cut = false) {
+    // First, normalize spaces - replace multiple spaces with a single space
+    string = string.replace(/\s+/g, ' ');
+    
     const words = string.split(' ').reverse();
     let result = '';
     let line = '';
     
     while (words.length) {
-        const word = words.pop();
+        let word = words.pop(); // Changed const to let
         if ((line + word).length >= width) {
             if (word.length > width && cut) {
                 words.push(word.substring(width));
