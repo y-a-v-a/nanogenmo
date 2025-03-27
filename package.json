@@ -13,16 +13,16 @@
   "license": "MIT",
   "author": "y-a-v-a • Vincent Bruijn <vebruijn@gmail.com>",
   "type": "module",
-  "main": "generator.mjs",
+  "main": "src/generator.mjs",
   "engines": {
     "node": ">=16.0.0"
   },
   "scripts": {
-    "start": "node generator.mjs",
-    "generate": "node generator.mjs",
-    "run-pg1041": "node generator.mjs pg1041.txt pg1041-output.txt \"\" 500",
-    "save-table": "node generator.mjs pg1041.txt pg1041-output.txt \"\" 500 markov-table.json",
-    "load-table": "node generator.mjs \"\" pg1041-from-table.txt \"\" 500 markov-table.json",
+    "start": "node src/generator.mjs",
+    "generate": "node src/generator.mjs",
+    "run-pg1041": "node src/generator.mjs assets/pg1041.txt output/pg1041-output.txt \"\" 500",
+    "save-table": "node src/generator.mjs assets/pg1041.txt output/pg1041-output.txt \"\" 500 output/markov-table.json",
+    "load-table": "node src/generator.mjs \"\" output/pg1041-from-table.txt \"\" 500 output/markov-table.json",
     "test": "node --experimental-vm-modules node_modules/jest/bin/jest.js"
   },
   "devDependencies": {

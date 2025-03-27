@@ -1,4 +1,4 @@
-import { wordwrap } from './wordwrap.mjs';
+import { wordwrap } from '../src/wordwrap.mjs';
 
 describe('wordwrap function', () => {
   test('wraps text at the specified width', () => {

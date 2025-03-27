@@ -12,7 +12,7 @@ npm run generate -- [input_file] [output_file] [seed_word] [word_count]
 npm run run-pg1041
 
 # Or directly with node
-node generator.mjs [input_file] [output_file] [seed_word] [word_count]
+node src/generator.mjs [input_file] [output_file] [seed_word] [word_count]
 ```
 
 Arguments:
@@ -25,6 +25,12 @@ Arguments:
 The `table_file` argument serves dual purposes:
 1. If the file doesn't exist, the program will save the generated Markov chain table to this file
 2. If the file exists, the program will load the Markov chain from this file instead of processing the input file
+
+## Project Structure
+- `/src` - Source code files
+- `/test` - Test files
+- `/assets` - Input text files
+- `/output` - Generated text output and saved tables
 
 ## Module System
 - Uses ES Modules (ESM) with `type: "module"` in package.json
